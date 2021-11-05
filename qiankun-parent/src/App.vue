@@ -15,7 +15,6 @@
             <!--引用其他子应用-->
             <el-menu-item index="/qiankun-child-vue"><i class="el-icon-platform-eleme"></i><span slot="title">Vue项目</span></el-menu-item>
             <el-menu-item index="/child-app1"><i class="el-icon-platform-eleme"></i><span slot="title">另一台服务器项目</span></el-menu-item>
-            
           </el-menu>
         </el-aside>
         <el-main>
