@@ -1,0 +1,99 @@
+
+body {
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  background-color: #f7f8fa;
+}
+
+label {
+  font-weight: 700;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+html ul {
+  margin: 0;
+  padding: 0;
+}
+
+html li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  height: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.padding-content {
+  padding: 4px 0;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+.sen-container {
+  height: 100%;
+  width: 100%;
+}
+.sen-container .el-container {
+  border: none;
+  /* height: 100% !important;
+  width: 100% !important; */
+}
+.sen-container .el-menu {
+  border-right: none;
+}
+.sen-container .el-aside {
+  background-color: #fff;
+  height: 100%;
+  box-shadow: 0 8px 12px #ebedf0;
+}
+.sen-container .el-menu .el-menu-item {
+  color: #2c3e50;
+}
+.sen-container .el-menu-item.is-active {
+  background-color: rgba(235, 255, 240, 1);
+}
+.sen-container .el-menu-item:hover {
+  background-color: rgba(235, 255, 240, 0.3);
+}
+.sen-container .el-header {
+  border-bottom: 1px solid #ebedf0;
+  background-color: #fff;
+  box-shadow: 8px 0px 12px #ebedf0;
+}
+.sen-container .el-main {
+  margin: 20px;
+  background-color: #fff;
+  box-shadow: 8px 8px 12px #ebedf0;
+}
