@@ -1,4 +1,43 @@
 # qiankun微前段搭建vue和react项目，使用nginx部署相关注意事项
+## 项目运行图片
+![Vue效果图](qiankun-child-vue.png)
+![React效果图](qiankun-child-react.png)
+## 运行项目
+1. 下载父项目哥子项目各自的依赖
+2. 先运行子项目，再运行父项目。如果子项目端口有变化需要修改父项目里的配置，访问父项目查看效果
+3. 父项目的配置信息在 qiankun-parent/src/default-app.js
+```javascript
+let apps
+if (process.env.NODE_ENV === 'production') {
+  // 打包 部署的配置
+  apps = [ 
+    {
+      name:'qiankun-child-vue', // 应用的名字
+      entry:'/child/vue1/', // 默认会加载这个html 解析里面的js 动态的执行 （子应用必须支持跨域）fetch
+      container:'#container', // 容器名
+      activeRule:'/vue1' // 激活的路径
+    }
+  ]
+} else {
+  // 开发运行配置
+  apps = [ 
+    {
+      name:'qiankun-child-vue', // 应用的名字
+      entry:'//localhost:10002', // 默认会加载这个html 解析里面的js 动态的执行 （子应用必须支持跨域）fetch
+      container:'#container', // 容器名
+      activeRule:'/qiankun-child-vue' // 激活的路径
+    },
+    {
+      name:'qiankun-child-react', // 应用的名字
+      entry:'//localhost:3000', // 默认会加载这个html 解析里面的js 动态的执行 （子应用必须支持跨域）fetch
+      container:'#container', // 容器名
+      activeRule:'/qiankun-child-react' // 激活的路径
+    }
+  ]
+}
+
+export default apps
+```
 
 ## 一 新建vue子项目注意事项 -- 推荐参考官方文档[https://qiankun.umijs.org/zh]
 1. 新建vue.config.js
