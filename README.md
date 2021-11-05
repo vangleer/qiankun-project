@@ -103,39 +103,32 @@ if (window.__POWERED_BY_QIANKUN__) {
 3. 入口文件 index.js 修改，为了避免根 id #root 与其他的 DOM 冲突，需要限制查找范围。
 4. 修改 webpack 配置
 
-    - 安装插件 @rescripts/cli，当然也可以选择其他的插件，例如 react-app-rewired。
+    - 安装插件 react-app-rewired。
       ```shell
-        npm i -D @rescripts/cli
+        npm i -D react-app-rewired
       ```
 
-    - 根目录新增 .rescriptsrc.js：
+    - 根目录新增 config-overrides.js：
       ```javascript
-        const { name } = require('./package');
-
         module.exports = {
-          webpack: (config) => {
-            config.output.library = `${name}-[name]`;
-            config.output.libraryTarget = 'umd';
-            config.output.jsonpFunction = `webpackJsonp_${name}`;
-            config.output.globalObject = 'window';
-
-            return config;
-          },
-
-          devServer: (_) => {
-            const config = _;
-
+        webpack: function override(config, env) {
+          config.output.library = `qiankun-child-react`;
+          config.output.libraryTarget = 'umd';
+          return config;
+        },
+        devServer: (configFunction) => {
+          return function (proxy, allowedHost) {
+            const config = configFunction(proxy, allowedHost);
+            config.open = false;
+            config.hot = false;
+            config.port = 10003;
             config.headers = {
               'Access-Control-Allow-Origin': '*',
             };
-            config.historyApiFallback = true;
-            config.hot = false;
-            config.watchContentBase = false;
-            config.liveReload = false;
-
             return config;
-          },
-        };
+          };
+        },
+      };
       ```
 
     - 修改 package.json：
