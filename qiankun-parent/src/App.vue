@@ -14,7 +14,7 @@
             <el-menu-item index="/"><i class="el-icon-s-home"></i><span slot="title">首页</span></el-menu-item> 
             <!--引用其他子应用-->
             <el-menu-item index="/qiankun-child-vue"><i class="el-icon-platform-eleme"></i><span slot="title">Vue项目</span></el-menu-item>
-            <el-menu-item index="/qiankun-child-react"><i class="el-icon-platform-eleme"></i><span slot="title">React项目</span></el-menu-item>
+            <el-menu-item index="/child-app1"><i class="el-icon-platform-eleme"></i><span slot="title">另一台服务器项目</span></el-menu-item>
             
           </el-menu>
         </el-aside>

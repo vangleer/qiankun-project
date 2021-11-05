@@ -23,7 +23,7 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   routes,
-  base: window.__POWERED_BY_QIANKUN__ ? '/qiankun-child-vue' : '/'
+  base: window.__POWERED_BY_QIANKUN__ ? '/child-app1' : '/'
 })
 
 export default router

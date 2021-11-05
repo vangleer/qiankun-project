@@ -1,5 +1,5 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/qiankun-child-vue' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/app1' : '/',
   devServer:{
       port: 10002,
       headers:{

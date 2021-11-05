@@ -190,3 +190,116 @@ if (window.__POWERED_BY_QIANKUN__) {
     activeRule:'/qiankun-child-react', // 对应路由的 base
 }
 ```
+
+## 在父项目里为子项目配置代理
+1. 这里为了模拟接口使用node+express运行两个服务器
+    需要运行一下node-server/src目录下的两个服务
+```
+node node-server/src/api-vue.js
+node node-server/src/api-react.js
+```
+2. 在qiankun-parent/vue.config.js
+```javascript
+// 服务项配置    
+devServer: {
+    // 设置代理proxy
+    proxy: {
+        "/qiankun-child-vue/api": {
+            target: "http://localhost:7001", // Vue项目
+            changeOrigin: true,
+            ws: true,
+            pathRewrite: {
+                "^/qiankun-child-vue/api": ""
+            }
+        },
+        "/qiankun-child-react/api": {
+            target: "http://localhost:7002", // React项目
+            changeOrigin: true,
+            ws: true,
+            pathRewrite: {
+                "^/qiankun-child-react/api": ""
+            }
+        }
+    }
+}
+```
+3. 在子项目中发送代理的路径发送请求即可
+```javascript
+axios.get('/qiankun-child-vue/api/hello').then(res => console.log(res))
+```
+
+## nginx部署 （父项目和子项目部署在同一个服务器上）
+- 注意子项目文件夹需和子项目打包时的publicPath对应
+```
+publicPath: process.env.NODE_ENV === 'production' ? '/child-vue' : '/',
+```
+1. 父项目和子项目部署在同一个服务器上
+└── html/                     # 根文件夹
+    |
+    ├── child-vue/            # 存放Vue项目 需和项目打包时的publicPath对应
+    ├── index.html            # 主应用的index.html
+    ├── css/                  # 主应用的css文件夹
+    ├── js/                   # 主应用的js文件夹
+
+2. nginx配置
+```
+server {
+  listen       8001;
+  server_name  localhost;
+
+  location / {
+    root   html;
+    index  index.html index.htm;
+    try_files $uri $uri/ /index.html;
+  }
+
+  # 避免刷新时出现404的情况
+  location /qiankun-child-vue/ {
+    root   html;
+    index  index.html index.htm;
+    try_files $uri $uri/ /qiankun-child-vue/index.html;
+  }
+  # 代理vue项目请求
+  location /qiankun-child-vue/api/ {
+      proxy_pass http://localhost:3001;
+      rewrite "^/qiankun-child-vue/api/(.*)$" /$1 break;
+      proxy_set_header Host $host:$server_port;
+  }
+}
+```
+
+## 将子项目部署到另一台服务器 使用 Nginx 代理访问
+- 一般这么做是因为不允许主应用跨域访问微应用，做法就是将主应用服务器上一个特殊路径的请求全部转发到微应用的服务器上，即通过代理实现“微应用部署在主应用服务器上”的效果。
+
+例如，主应用在 A 服务器，微应用在 B 服务器，使用路径 /child-app1 来区分微应用，即 A 服务器上所有 /child-app1 开头的请求都转发到 B 服务器上。
+
+此时主应用的 Nginx 代理配置为：
+```
+/app1/ {
+  proxy_pass http://localhost:8002/app1/;
+  proxy_set_header Host $host:$server_port;
+}
+```
+- 主应用注册微应用时，entry 可以为相对路径，activeRule 不可以和 entry 一样（否则主应用页面刷新就变成微应用）：
+```
+{
+  name: 'app1',
+  entry: '/app1/', // http://localhost:8080/app1/
+  container: '#container',
+  activeRule: '/child-app1',
+},
+```
+- 对于 webpack 构建的微应用，微应用的 webpack 打包的 publicPath 需要配置成 /app1/，否则微应用的 index.html 能正确请求，但是微应用 index.html 里面的 js/css 路径不会带上 /app1/。
+
+```javascript
+  module.exports = {
+    output: {
+      publicPath: `/app1/`,
+    },
+  };
+```
+- 微应用打包的 publicPath 加上 /app1/ 之后，必须部署在 /app1 目录，否则无法独立访问。
+
+- 新起一个nginx服务，端口设置为 8002，将打包好的静态文件放到 /app1目录下
+
+
