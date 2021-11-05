@@ -8,6 +8,7 @@
 1. 下载父项目和子项目各自的依赖
 2. 先运行子项目，再运行父项目。如果子项目端口有变化需要修改父项目里的配置，访问父项目查看效果
 3. 父项目的配置信息在 qiankun-parent/src/default-app.js
+4. 为了完整性，这里把nginx和node代码也放上来，方便快速搭建
 ```javascript
 let apps
 if (process.env.NODE_ENV === 'production') {
@@ -47,7 +48,7 @@ if (process.env.NODE_ENV === 'production') {
 export default apps
 ```
 
-## 一 新建vue子项目注意事项 -- 推荐参考官方文档[https://qiankun.umijs.org/zh]
+## 新建vue子项目注意事项 -- 推荐参考官方文档[https://qiankun.umijs.org/zh]
 1. 新建vue.config.js
 ```javascript
 module.exports = {
@@ -136,7 +137,7 @@ const router = new VueRouter({
 }
 ```
 
-## 二 新建react子项目注意事项 -- 推荐参考官方文档[https://qiankun.umijs.org/zh]
+## 新建react子项目注意事项 -- 推荐参考官方文档[https://qiankun.umijs.org/zh]
 1. 在 src 目录新增 public-path.js
 ```javascript
 if (window.__POWERED_BY_QIANKUN__) {
@@ -309,5 +310,8 @@ server {
 - 微应用打包的 publicPath 加上 /app1/ 之后，必须部署在 /app1 目录，否则无法独立访问。
 
 - 新起一个nginx服务，端口设置为 8002，将打包好的静态文件放到 /app1目录下
+
+
+### 部署的方法都差不多，这里只写了vue项目的部署
 
 
