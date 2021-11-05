@@ -10,6 +10,7 @@ module.exports = {
       const config = configFunction(proxy, allowedHost);
       config.open = false;
       config.hot = false;
+      config.port = 10003;
       config.headers = {
         'Access-Control-Allow-Origin': '*',
       };
