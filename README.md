@@ -159,35 +159,34 @@ if (window.__POWERED_BY_QIANKUN__) {
     - 根目录新增 config-overrides.js：
       ```javascript
         module.exports = {
-        webpack: function override(config, env) {
-          config.output.library = `qiankun-child-react`;
-          config.output.libraryTarget = 'umd';
-          return config;
-        },
-        devServer: (configFunction) => {
-          return function (proxy, allowedHost) {
-            const config = configFunction(proxy, allowedHost);
-            config.open = false;
-            config.hot = false;
-            config.port = 10003;
-            config.headers = {
-              'Access-Control-Allow-Origin': '*',
-            };
+          webpack: function override(config, env) {
+            config.output.publicPath = env.NODE_ENV === 'production' ? '/child-react' : '/';
+            config.output.library = `qiankun-child-react`;
+            config.output.libraryTarget = 'umd';
             return config;
-          };
-        },
-      };
+          },
+          devServer: (configFunction) => {
+            return function (proxy, allowedHost) {
+              const config = configFunction(proxy, allowedHost);
+              config.open = false;
+              config.hot = false;
+              config.headers = {
+                'Access-Control-Allow-Origin': '*',
+              };
+              return config;
+            };
+          },
+        };
       ```
 
     - 修改 package.json：
       ```
-        -   "start": "react-scripts start",
+        -   "start": "react-app-rewired start",
         +   "start": "rescripts start",
-        -   "build": "react-scripts build",
+        -   "build": "react-app-rewired build",
         +   "build": "rescripts build",
-        -   "test": "react-scripts test",
+        -   "test": "react-app-rewired test",
         +   "test": "rescripts test",
-        -   "eject": "react-scripts eject"
       ```
 
 4. 在父项目添加的配置
